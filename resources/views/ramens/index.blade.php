@@ -38,7 +38,8 @@
                   
 
                    <div class="mt-auto text-end d-flex justify-content-end gap-2">
-    <a href="{{ route('ramens.edit', $ramen) }}" class="btn btn-sm btn-outline-primary">詳細</a>
+   <button class="btn btn-sm btn-detail" data-id="{{ $ramen->id }}">詳細</button>
+
 </div>
 
                 </div>
@@ -49,5 +50,39 @@
     <div class="mt-4">
     {{ $ramens->links() }}
     </div>
+
+<!-- モーダル -->
+<div class="modal fade" id="ramenDetailModal" tabindex="-1" aria-labelledby="ramenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- ヘッダー -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="ramenModalLabel">ラーメン詳細</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+
+      <!-- 本文 -->
+      <div class="modal-body">
+        <p><strong>画像：</strong> <span id="modal-image"></span></p>
+        <p><strong>店名：</strong> <span id="modal-shop_name"></span></p>
+        <p><strong>日付：</strong> <span id="modal-date"></span></p>
+        <p><strong>住所：</strong> <span id="modal-prefecture"></span></p>
+        <p><strong>感想：</strong> <span id="modal-review"></span></p>
+        <p><strong>おすすめ：</strong> <span id="modal-recommend"></span></p>
+        <p><strong>URL：</strong> <span id="modal-url"></span></p>  
+    </div>
+
+      <!-- フッター -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 </div>
 @endsection

@@ -177,6 +177,22 @@ public function destroy(Ramen $ramen)
         return view('ramens.recomend',compact('ramens'));
     }
 
+//一覧から詳細をモーダルで取得
+public function showrecord($id)
+{
+    $ramen = Ramen::findOrFail($id);
+
+    return response()->json([
+        'shop_name' => $ramen->shop_name,
+        'date' => $ramen->ate_on,
+        'prefecture' => $ramen->prefecture_name,
+        'review' => $ramen->review,
+        'is_recomended' => $ramen->is_recomended,
+        'shop_url' => $ramen->shop_url,
+        'image_path' => asset('storage/images/' . $ramen->image_path),
+    ]);
+}
+
 
 
 }

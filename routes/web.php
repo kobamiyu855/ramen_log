@@ -32,3 +32,5 @@ Route::delete('/ramens/{ramen}', [RamenController::class, 'destroy'])->name('ram
 Route::get('/ramens/map', [RamenController::class, 'showmap'])->name('ramens.showmap');
 Route::get('/ramens/map/{prefecture}', [RamenController::class, 'map'])->name('ramens.map');
 Route::get('/ramens/recomend', [RamenController::class, 'recomend'])->name('ramens.recomend');
+
+Route::get('/ramens/{id}', [RamenController::class, 'showrecord'])->name('ramens.showrecord');
