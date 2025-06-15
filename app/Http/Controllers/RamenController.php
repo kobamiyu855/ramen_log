@@ -189,7 +189,7 @@ public function showrecord($id)
         'review' => $ramen->review,
         'is_recomended' => $ramen->is_recomended,
         'shop_url' => $ramen->shop_url,
-        'image_path' => asset('storage/images/' . $ramen->image_path),
+        'image_path' =>$ramen->image_path,
     ]);
 }
 

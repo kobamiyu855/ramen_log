@@ -38,7 +38,7 @@
                   
 
                    <div class="mt-auto text-end d-flex justify-content-end gap-2">
-   <button class="btn btn-sm btn-detail" data-id="{{ $ramen->id }}">詳細</button>
+   <button class="btn btn-sm btn-light btn-detail" data-id="{{ $ramen->id }}">詳細</button>
 
 </div>
 
@@ -64,8 +64,8 @@
 
       <!-- 本文 -->
       <div class="modal-body">
-        <p><strong>画像：</strong> <span id="modal-image"></span></p>
         <p><strong>店名：</strong> <span id="modal-shop_name"></span></p>
+        <img id="modal-image" style="width: 200px; height: 150px; object-fit: cover; object-position:center;"></p>
         <p><strong>日付：</strong> <span id="modal-date"></span></p>
         <p><strong>住所：</strong> <span id="modal-prefecture"></span></p>
         <p><strong>感想：</strong> <span id="modal-review"></span></p>
