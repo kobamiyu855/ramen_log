@@ -2,15 +2,23 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="mb-4">新着ラーメン</h2>
-     <div class="mt-4 d-flex justify-content-end">
-    {{ $ramens->links() }}
-    </div>
+   <div class="d-flex align-items-center justify-content-between mb-3">
+  <div>
+    <h2 class="mb-0">新着ラーメン</h2>
+  </div>
+  <div>
     @if (session('success'))
-    <div class="alert alert-success alert-dismissible" role="alert">
-        {{ session('success') }}
+    <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+      {{ session('success') }}
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
+  </div>
+  <div>
+    {{ $ramens->links() }}
+  </div>
+</div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach ($ramens as $ramen)
         <div class="col">
@@ -57,20 +65,19 @@
     <div class="modal-content">
 
       <!-- ヘッダー -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="ramenModalLabel">ラーメン詳細</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <h5 class="modal-title" id="ramenModalLabel"><strong><span id="modal-shop_name"></span></strong></h5>
+        <div id="modal-recommend-wrapper"><span id="modal-recommend" class="badge bg-danger"></span></div>
       </div>
 
       <!-- 本文 -->
       <div class="modal-body">
-        <p><strong>店名：</strong> <span id="modal-shop_name"></span></p>
-        <img id="modal-image" style="width: 200px; height: 150px; object-fit: cover; object-position:center;"></p>
-        <p><strong>日付：</strong> <span id="modal-date"></span></p>
-        <p><strong>住所：</strong> <span id="modal-prefecture"></span></p>
+        <p><img id="modal-image" style="width: 100%; height: 300px; object-fit: cover; object-position:center;"></p>
+        <p><span id="modal-date" class="me-3"></span>|<span id="modal-prefecture"class="ms-3"></span></p>
+        
         <p><strong>感想：</strong> <span id="modal-review"></span></p>
-        <p><strong>おすすめ：</strong> <span id="modal-recommend"></span></p>
-        <p><strong>URL：</strong> <span id="modal-url"></span></p>  
+        
+        <p><strong><i class="bi bi-house"></i>：</strong> <a id="modal-url"></a></p>  
     </div>
 
       <!-- フッター -->

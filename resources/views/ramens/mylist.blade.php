@@ -49,6 +49,7 @@
         </li>
         @endforeach
     </ul>
+    {{ $ramens->links() }}
     @endif
 </div>
 @endsection
