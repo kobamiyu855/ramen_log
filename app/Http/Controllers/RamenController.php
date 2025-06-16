@@ -49,6 +49,7 @@ public function index(Request $request)
         'ate_on' => 'required|date',
         'review' => 'required|string|max:255',
         'image' => 'nullable|image|max:2048', // 2MBまで
+        'shop_url'=>'nullable|string',
         'is_recommended' => 'boolean',
     ]);
 
@@ -187,7 +188,7 @@ public function showrecord($id)
         'date' => $ramen->ate_on,
         'prefecture' => $ramen->prefecture_name,
         'review' => $ramen->review,
-        'is_recomended' => $ramen->is_recomended,
+        'is_recomended' => $ramen->is_recommended,
         'shop_url' => $ramen->shop_url,
         'image_path' =>$ramen->image_path,
     ]);
