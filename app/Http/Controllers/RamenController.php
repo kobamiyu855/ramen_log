@@ -15,7 +15,7 @@ class RamenController extends Controller
         $this->middleware('auth');
     }
 
-//index表示
+//////index表示
 public function index(Request $request)
 {
     //検索用
@@ -39,7 +39,7 @@ public function index(Request $request)
     }
 }
 
-    //ラーメン登録
+//////ラーメン登録
     public function store(Request $request)
 {
     // 1. バリデーション
@@ -62,19 +62,27 @@ public function index(Request $request)
     // 3.ユーザーIDをログインIDに
     $validated['user_id'] = auth()->id();
 
-    // 4. モデル保存
+    // 4.登録処理(SQLエラーをtrycatchで確認)
+     try {
     Ramen::create($validated);
 
-    // 5. 完了後に一覧や確認ページへリダイレクト
+    // 5.完了後に一覧ページへリダイレクト
     return redirect()->route('ramens.index')->with('success', 'ラーメン情報を登録しました！');
+
+     } catch (\Exception $e) {
+        //6.SQLエラーの場合はログにエラー出力し編集画面にリダイレクト
+        \Log::error('ラーメン情報登録エラー: '.$e->getMessage());
+
+        return back()->withInput()->with('error', 'ラーメン情報の登録に失敗しました。もう一度お試しください。');
+    }
 }
 
-//登録画面表示
+//////登録画面表示
     public function create(){
         return view('ramens.create'/*,compact('ramens')*/);
     }
 
-//自分の一覧表示
+//////自分の一覧表示
    public function mylist(){
         //全件表示$ramens=Ramen::all();
         $ramens = Auth::user()->ramens()->latest()->paginate(10);
@@ -82,7 +90,7 @@ public function index(Request $request)
     }
 
 
-//編集画面表示(ifで登録ユーザかどうかを確認)
+//////編集画面表示(ifで登録ユーザかどうかを確認)
       public function edit(Ramen $ramen)
 {
      if ($ramen->user_id !== Auth::id()) {
@@ -93,10 +101,10 @@ public function index(Request $request)
     return view('ramens.edit', compact('ramen', 'prefectures'));
 }
 
-//情報更新
+//////情報更新
     public function update(Request $request, Ramen $ramen)
 {
-    // バリデーション
+    //1.バリデーション
     $validated = $request->validate([
         'shop_name' => 'required|string|max:255',
         'ate_on' => 'required|date',
@@ -107,8 +115,8 @@ public function index(Request $request)
         'image' => 'nullable|image|max:2048', // 2MBまで
     ]);
     
-
-    // 画像が新しくアップロードされた場合の処理
+    
+    //2.画像が新しくアップロードされた場合の処理
     if ($request->hasFile('image')) {
         // 元の画像を削除（任意）
         if ($ramen->image_path) {
@@ -120,13 +128,21 @@ public function index(Request $request)
         $validated['image_path'] = basename($path);
     }
 
-    // 更新
+    ///3.SQLエラーを確認
+    try {
+    // 4.DBを更新して一覧画面にリダイレクト
     $ramen->update($validated);
-
     return redirect()->route('ramens.index')->with('success', 'ラーメン情報を更新しました！');
+
+     } catch (\Exception $e) {
+    //5.SQLエラーの場合はログにエラー出力し編集画面にリダイレクト
+        \Log::error('ラーメン情報更新エラー: '.$e->getMessage());
+        return back()->withInput()->with('error', 'ラーメン情報の更新に失敗しました。もう一度お試しください。');
+    }
+
 }
 
-//ラーメン情報削除
+//////ラーメン情報削除(ifで登録ユーザかどうかを確認)
 public function destroy(Ramen $ramen)
 {
     // 自分の投稿でなければ削除させない
@@ -141,7 +157,7 @@ public function destroy(Ramen $ramen)
     return redirect()->route('ramens.index')->with('success', '削除しました');
 }
 
-//地図表示
+//////地図表示
    public function showmap(){
     //総数を取得
     $totalCount=Ramen::count();
@@ -155,9 +171,9 @@ public function destroy(Ramen $ramen)
     return view('ramens.map',compact('totalCount','prefectureCounts'));
     }
 
-//県別データ取得と表示(TODO:非同期処理で総数と県別数を取得しない)
+//////県別データ取得と表示(TODO:非同期処理で総数と県別数を取得しない)
     public function map($prefecture){
-        //後で消す
+        
              //総数を取得
             $totalCount=Ramen::count();
             // 都道府県別の件数を取得（例：['北海道' => 5, '東京都' => 8, ...]）
@@ -172,13 +188,14 @@ public function destroy(Ramen $ramen)
         return view('ramens.map',compact('ramens','prefecture','count','totalCount','prefectureCounts'));
     }
 
-//おすすめ取得と表示（TODO:ログインユーザのみのお気に入り表示）
+//////おすすめ取得と表示（ログインユーザのみのお気に入り表示）
     public function recomend(){
-        $ramens = Ramen::where('is_recommended',true)->latest()->paginate(10);
+        //$ramens = Ramen::where('is_recommended',true)->latest()->paginate(10);(全件表示)
+        $ramens = Auth::user()->ramens()->where('is_recommended', 1)->latest()->paginate(10);
         return view('ramens.recomend',compact('ramens'));
     }
 
-//一覧から詳細をモーダルで取得
+//////一覧から詳細をモーダルで取得
 public function showrecord($id)
 {
     $ramen = Ramen::findOrFail($id);
