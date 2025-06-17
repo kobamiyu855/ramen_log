@@ -7,8 +7,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!--タイトルとファビコン-->
     <title>{{ config('app.name','Laravel') }}</title>
-
+    <link rel="icon" href="{{ asset('ramen.svg') }}" type="image/svg+xml">  
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -32,7 +34,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- Left Side Of Navbar -->
-                    <a href="{{ route('ramens.index') }}"><img src="{{ asset('storage/appimages/logo.png') }}" alt="Ramen.Log" height="50" class="me-2"></a>
+                    <a href="{{ route('ramens.index') }}"><img src="{{ asset('storage/appimages/logo.png') }}" alt="Ramen.Log" height="50" class="me-2" title="ホーム"></a>
                     @auth
                         <ul class="navbar-nav me-auto">
                          <li><a class="nav-link" href="{{ route('ramens.create') }}" title="登録"><i class="bi bi-plus-lg" title="登録"style="font-size: 1.5rem;"></i></a></li>
@@ -83,9 +85,9 @@
                                 </div>
                             </li>
                         @endguest
-                       
+                       <li><a href=""><i class="bi bi-person-lock"style="font-size: 1.5rem;" title="管理用"></i></a></li>
                     </ul>
-                    <a href=""><i class="bi bi-person-lock"style="font-size: 1.5rem;" title="管理用"></i></a>
+                    
                 </div>
             </div>
         </nav>
