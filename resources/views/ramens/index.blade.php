@@ -8,9 +8,8 @@
   </div>
   <div>
     @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show mb-0" role="alert">
       {{ session('success') }}
-       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
   </div>
@@ -75,7 +74,7 @@
         <p><img id="modal-image" style="width: 100%; height: 300px; object-fit: cover; object-position:center;"></p>
         <p><span id="modal-date" class="me-3"></span>|<span id="modal-prefecture"class="ms-3"></span></p>
         
-        <p><strong>感想：</strong> <span id="modal-review"></span></p>
+        <p><span id="modal-review"></span></p>
         
         <p><strong><i class="bi bi-house"></i>：</strong> <a id="modal-url"></a></p>  
     </div>

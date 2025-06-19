@@ -65,3 +65,9 @@ console.log('通信成功:', data);
             }
     });
 });
+
+//index成功メッセージの消去
+$(document).ready(function() {
+    // 3秒後にアラートをフェードアウト（500ミリ秒かけて）
+    $("#success-alert").delay(3000).fadeOut(500);
+});

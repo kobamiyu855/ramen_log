@@ -28,13 +28,12 @@ public function index(Request $request)
               ->orWhere('review', 'like', "%{$keyword}%")
               ->orWhere('prefecture_name', 'like', "%{$keyword}%");
 
-        $ramens = $query->latest()->paginate(10)->appends(['keyword' => $keyword]);
+        $ramens = $query->latest('ate_on')->paginate(10)->appends(['keyword' => $keyword]);
 
         return view('ramens.search', compact('ramens', 'keyword'));
     //ない場合はindex表示
     } else {
-        $ramens = $query->latest()->paginate(9);
-
+        $ramens = $query->latest('ate_on')->paginate(9);
         return view('ramens.index', compact('ramens'));
     }
 }
@@ -85,7 +84,7 @@ public function index(Request $request)
 //////自分の一覧表示
    public function mylist(){
         //全件表示$ramens=Ramen::all();
-        $ramens = Auth::user()->ramens()->latest()->paginate(10);
+        $ramens = Auth::user()->ramens()->latest('ate_on')->paginate(10);
         return view('ramens.mylist',compact('ramens'));
     }
 
@@ -132,7 +131,7 @@ public function index(Request $request)
     try {
     // 4.DBを更新して一覧画面にリダイレクト
     $ramen->update($validated);
-    return redirect()->route('ramens.index')->with('success', 'ラーメン情報を更新しました！');
+    return redirect()->route('ramens.index')->with('success', $ramen->shop_name.'のラーメン情報を更新しました！');
 
      } catch (\Exception $e) {
     //5.SQLエラーの場合はログにエラー出力し編集画面にリダイレクト
@@ -183,7 +182,7 @@ public function destroy(Ramen $ramen)
             ->pluck('count', 'prefecture_name')
             ->toArray();
 
-        $ramens = Ramen::where('prefecture_name', $prefecture)->latest()->paginate(10)->appends(['prefecture' => $prefecture]);
+        $ramens = Ramen::where('prefecture_name', $prefecture)->latest('ate_on')->paginate(10)->appends(['prefecture' => $prefecture]);
         $count = $ramens->count();
         return view('ramens.map',compact('ramens','prefecture','count','totalCount','prefectureCounts'));
     }
@@ -191,7 +190,7 @@ public function destroy(Ramen $ramen)
 //////おすすめ取得と表示（ログインユーザのみのお気に入り表示）
     public function recomend(){
         //$ramens = Ramen::where('is_recommended',true)->latest()->paginate(10);(全件表示)
-        $ramens = Auth::user()->ramens()->where('is_recommended', 1)->latest()->paginate(10);
+        $ramens = Auth::user()->ramens()->where('is_recommended', 1)->latest('ate_on')->paginate(10);
         return view('ramens.recomend',compact('ramens'));
     }
 

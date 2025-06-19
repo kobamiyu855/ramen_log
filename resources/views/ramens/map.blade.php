@@ -348,7 +348,7 @@
         <p><img id="modal-image" style="width: 100%; height: 300px; object-fit: cover; object-position:center;"></p>
         <p><span id="modal-date" class="me-3"></span>|<span id="modal-prefecture"class="ms-3"></span></p>
         
-        <p><strong>感想：</strong> <span id="modal-review"></span></p>
+        <p><span id="modal-review"></span></p>
         
         <p><strong><i class="bi bi-house"></i>：</strong> <a id="modal-url"></a></p>  
     </div>
