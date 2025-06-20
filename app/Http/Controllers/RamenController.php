@@ -67,7 +67,7 @@ public function index(Request $request)
     Ramen::create($validated);
 
     // 5.完了後に一覧ページへリダイレクト
-    return redirect()->route('ramens.index')->with('success', 'ラーメン情報を登録しました！');
+    return redirect()->route('ramens.index')->with('success', $ramen->shop_name.'のラーメン情報を登録しました！');
 
      } catch (\Exception $e) {
         //6.SQLエラーの場合はログにエラー出力し編集画面にリダイレクト
