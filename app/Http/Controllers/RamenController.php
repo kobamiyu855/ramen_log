@@ -26,7 +26,8 @@ public function index(Request $request)
     if (!empty($keyword)) {
         $query->where('shop_name', 'like', "%{$keyword}%")
               ->orWhere('review', 'like', "%{$keyword}%")
-              ->orWhere('prefecture_name', 'like', "%{$keyword}%");
+              ->orWhere('prefecture_name', 'like', "%{$keyword}%")
+              ->orwhere('ate_on','like',"%{$keyword}%");
 
         $ramens = $query->latest('ate_on')->paginate(10)->appends(['keyword' => $keyword]);
 
