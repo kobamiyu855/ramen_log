@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
+<div class="container w-100">
    <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
     <h2 class="mb-0">新着ラーメン</h2>

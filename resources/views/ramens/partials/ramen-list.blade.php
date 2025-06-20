@@ -1,7 +1,7 @@
  <ul class="list-group">
     @foreach ($ramens as $ramen)
         <li class="list-group-item mb-3">
-            <div class="d-flex align-items-center">
+            <div class="d-flex flex-column flex-md-row align-items-center">
                 
             <!-- 画像部分 -->
                  @if ($ramen->image_path)
@@ -13,12 +13,12 @@
                 <img src="{{ asset('storage/appimages/no-image.png') }}"
                 alt="ラーメン画像"
                      class="me-4 rounded flex-shrink-0"
-                     style="width: 200px; height: 150px; object-fit: cover; object-position:center;">
+                     style="width:100%; max-width: 200px; height: 150px; object-fit: cover; object-position:center;">
                 @endif
 
                 <!-- テキスト部分 -->
                 <div class="w-100">
-                    <h5 class="mb-1">{{ $ramen->shop_name }}</h5>
+                    <h5 class="my-1">{{ $ramen->shop_name }}</h5>
                     <small class="text-muted">
                         {{ config('prefectures')[$ramen->prefecture_name] ?? $ramen->prefecture_name }}
                         ・{{ $ramen->ate_on->format('Y年n月j日') }}
