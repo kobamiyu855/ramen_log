@@ -65,7 +65,7 @@ public function index(Request $request)
     // 4.登録処理(SQLエラーをtrycatchで確認)
      try {
     Ramen::create($validated);
-
+    $ramen = Ramen::create($validated);
     // 5.完了後に一覧ページへリダイレクト
     return redirect()->route('ramens.index')->with('success', $ramen->shop_name.'のラーメン情報を登録しました！');
 
@@ -106,9 +106,9 @@ public function index(Request $request)
 {
     //1.バリデーション
     $validated = $request->validate([
-        'shop_name' => 'required|string|max:255',
+        'shop_name' => 'required|string|max:100',
         'ate_on' => 'required|date',
-        'review' => 'nullable|string',
+        'review' => 'required|string|max:255',
         'prefecture_name' => 'required|string|max:10',
         'shop_url'=>'nullable|string',
         'is_recommended' => 'boolean',
@@ -151,7 +151,7 @@ public function destroy(Ramen $ramen)
     }
     //画像がnullでない時だけ削除
     if($ramen->image_path){
-    Storage::delete($ramen->image_path);
+    Storage::delete('public/images/' . $ramen->image_path);
 }
     $ramen->delete();
     return redirect()->route('ramens.index')->with('success', '削除しました');
@@ -168,12 +168,6 @@ public function destroy(Ramen $ramen)
     ->pluck('count', 'prefecture_name')
     ->toArray();
 
-    // セッションに保存（リダイレクト先で再利用）
-    session([
-        'ramens_totalCount' => $totalCount,
-        'ramens_prefectureCounts' => $prefectureCounts,
-    ]);
-
     return view('ramens.map',compact('totalCount','prefectureCounts'));
     }
 
@@ -181,11 +175,12 @@ public function destroy(Ramen $ramen)
     public function map($prefecture){
         
         $ramens = Ramen::where('prefecture_name', $prefecture)->latest('ate_on')->paginate(10)->appends(['prefecture' => $prefecture]);
-        $count = $ramens->count();
+        $count = $ramens->total();
 
-        // セッションから取得（なければ再取得）
-        $totalCount = session('ramens_totalCount') ?? Ramen::count();
-        $prefectureCounts = session('ramens_prefectureCounts') ?? Ramen::select('prefecture_name')
+        //共通部を再取得
+        $totalCount=Ramen::count();
+        // 都道府県別の件数を取得（例：['北海道' => 5, '東京都' => 8, ...]）
+        $prefectureCounts = Ramen::select('prefecture_name')
         ->selectRaw('count(*) as count')
         ->groupBy('prefecture_name')
         ->pluck('count', 'prefecture_name')
@@ -217,7 +212,5 @@ public function showrecord($id)
         'image_path' =>$ramen->image_path,
     ]);
 }
-
-
 
 }

@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Auth::routes();
 Route::get('/ramens', [RamenController::class, 'index'])->name('ramens.index');
 Route::get('/ramens/create', [RamenController::class, 'create'])->name('ramens.create');
