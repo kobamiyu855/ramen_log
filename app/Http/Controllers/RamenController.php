@@ -15,7 +15,7 @@ class RamenController extends Controller
         $this->middleware('auth');
     }
 
-//////index表示
+//index表示
 public function index(Request $request)
 {
     //検索用
@@ -39,7 +39,7 @@ public function index(Request $request)
     }
 }
 
-//////ラーメン登録
+//ラーメン登録
     public function store(Request $request)
 {
     // 1. バリデーション
@@ -77,20 +77,21 @@ public function index(Request $request)
     }
 }
 
-//////登録画面表示
+//登録画面表示
     public function create(){
         return view('ramens.create'/*,compact('ramens')*/);
     }
 
-//////自分の一覧表示
+//自分の一覧表示
    public function mylist(){
+
         //全件表示$ramens=Ramen::all();
         $ramens = Auth::user()->ramens()->latest('ate_on')->paginate(10);
         return view('ramens.mylist',compact('ramens'));
     }
 
 
-//////編集画面表示(ifで登録ユーザかどうかを確認)
+//編集画面表示(ifで登録ユーザかどうかを確認)
       public function edit(Ramen $ramen)
 {
      if ($ramen->user_id !== Auth::id()) {
@@ -101,7 +102,7 @@ public function index(Request $request)
     return view('ramens.edit', compact('ramen', 'prefectures'));
 }
 
-//////情報更新
+//情報更新
     public function update(Request $request, Ramen $ramen)
 {
     //1.バリデーション
@@ -128,7 +129,7 @@ public function index(Request $request)
         $validated['image_path'] = basename($path);
     }
 
-    ///3.SQLエラーを確認
+    //3.SQLエラーを確認
     try {
     // 4.DBを更新して一覧画面にリダイレクト
     $ramen->update($validated);
@@ -142,7 +143,7 @@ public function index(Request $request)
 
 }
 
-//////ラーメン情報削除(ifで登録ユーザかどうかを確認)
+//ラーメン情報削除(ifで登録ユーザかどうかを確認)
 public function destroy(Ramen $ramen)
 {
     // 自分の投稿でなければ削除させない
@@ -157,7 +158,7 @@ public function destroy(Ramen $ramen)
     return redirect()->route('ramens.index')->with('success', '削除しました');
 }
 
-//////地図表示
+//地図表示
    public function showmap(){
     //総数を取得
     $totalCount=Ramen::count();
@@ -167,7 +168,7 @@ public function destroy(Ramen $ramen)
     return view('ramens.map',compact('totalCount','prefectureCounts'));
     }
 
-//////県別データ取得と表示(セッション情報から総件数と県別件数を再取得)
+//県別データ取得と表示
     public function map($prefecture){
         
         $ramens = Ramen::where('prefecture_name', $prefecture)->latest('ate_on')->paginate(10)->appends(['prefecture' => $prefecture]);
@@ -182,14 +183,16 @@ public function destroy(Ramen $ramen)
         return view('ramens.map',compact('ramens','prefecture','count','totalCount','prefectureCounts'));
     }
 
-//////おすすめ取得と表示（ログインユーザのみのお気に入り表示）
+//おすすめ取得と表示（ログインユーザのみのお気に入り表示）
     public function recomend(){
+
+        
         //$ramens = Ramen::where('is_recommended',true)->latest()->paginate(10);(全件表示)
         $ramens = Auth::user()->ramens()->where('is_recommended', 1)->latest('ate_on')->paginate(10);
         return view('ramens.recomend',compact('ramens'));
     }
 
-//////一覧から詳細をモーダルで取得
+//一覧から詳細をモーダルで取得
 public function showrecord($id)
 {
     $ramen = Ramen::findOrFail($id);
@@ -214,7 +217,5 @@ private function getPrefectureCounts()
         ->pluck('count', 'prefecture_name')
         ->toArray();
 }
-
-
 
 }
