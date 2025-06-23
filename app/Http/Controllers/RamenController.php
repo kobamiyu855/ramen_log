@@ -168,23 +168,30 @@ public function destroy(Ramen $ramen)
     ->pluck('count', 'prefecture_name')
     ->toArray();
 
+    // セッションに保存（リダイレクト先で再利用）
+    session([
+        'ramens_totalCount' => $totalCount,
+        'ramens_prefectureCounts' => $prefectureCounts,
+    ]);
+
     return view('ramens.map',compact('totalCount','prefectureCounts'));
     }
 
-//////県別データ取得と表示(TODO:非同期処理で総数と県別数を取得しない)
+//////県別データ取得と表示(セッション情報から総件数と県別件数を再取得)
     public function map($prefecture){
         
-             //総数を取得
-            $totalCount=Ramen::count();
-            // 都道府県別の件数を取得（例：['北海道' => 5, '東京都' => 8, ...]）
-            $prefectureCounts = Ramen::select('prefecture_name')
-            ->selectRaw('count(*) as count')
-            ->groupBy('prefecture_name')
-            ->pluck('count', 'prefecture_name')
-            ->toArray();
-
         $ramens = Ramen::where('prefecture_name', $prefecture)->latest('ate_on')->paginate(10)->appends(['prefecture' => $prefecture]);
         $count = $ramens->count();
+
+        // セッションから取得（なければ再取得）
+        $totalCount = session('ramens_totalCount') ?? Ramen::count();
+        $prefectureCounts = session('ramens_prefectureCounts') ?? Ramen::select('prefecture_name')
+        ->selectRaw('count(*) as count')
+        ->groupBy('prefecture_name')
+        ->pluck('count', 'prefecture_name')
+        ->toArray();
+
+
         return view('ramens.map',compact('ramens','prefecture','count','totalCount','prefectureCounts'));
     }
 
