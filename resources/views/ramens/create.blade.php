@@ -16,7 +16,7 @@
     {{-- 店名 --}}
     <div class="mb-3">
       <label for="shop_name" class="form-label">店名</label>
-      <input type="text" class="form-control" id="shop_name" name="shop_name" placeholder="（例）天下一品">
+      <input type="text" class="form-control" id="shop_name" name="shop_name" placeholder="（例）天下一品" autocomplete="off">
         @error('shop_name')
         <div class="text-danger">{{ $message }}</div>
         @enderror 
