@@ -162,11 +162,7 @@ public function destroy(Ramen $ramen)
     //総数を取得
     $totalCount=Ramen::count();
     // 都道府県別の件数を取得（例：['北海道' => 5, '東京都' => 8, ...]）
-    $prefectureCounts = Ramen::select('prefecture_name')
-    ->selectRaw('count(*) as count')
-    ->groupBy('prefecture_name')
-    ->pluck('count', 'prefecture_name')
-    ->toArray();
+    $prefectureCounts = $this->getPrefectureCounts();
 
     return view('ramens.map',compact('totalCount','prefectureCounts'));
     }
@@ -180,11 +176,7 @@ public function destroy(Ramen $ramen)
         //共通部を再取得
         $totalCount=Ramen::count();
         // 都道府県別の件数を取得（例：['北海道' => 5, '東京都' => 8, ...]）
-        $prefectureCounts = Ramen::select('prefecture_name')
-        ->selectRaw('count(*) as count')
-        ->groupBy('prefecture_name')
-        ->pluck('count', 'prefecture_name')
-        ->toArray();
+        $prefectureCounts = $this->getPrefectureCounts();
 
 
         return view('ramens.map',compact('ramens','prefecture','count','totalCount','prefectureCounts'));
@@ -212,5 +204,17 @@ public function showrecord($id)
         'image_path' =>$ramen->image_path,
     ]);
 }
+
+//県別カウント共通化
+private function getPrefectureCounts()
+{
+    return Ramen::select('prefecture_name')
+        ->selectRaw('count(*) as count')
+        ->groupBy('prefecture_name')
+        ->pluck('count', 'prefecture_name')
+        ->toArray();
+}
+
+
 
 }
