@@ -64,7 +64,7 @@ public function index(Request $request)
 
     // 4.登録処理(SQLエラーをtrycatchで確認)
      try {
-    Ramen::create($validated);
+    
     $ramen = Ramen::create($validated);
     // 5.完了後に一覧ページへリダイレクト
     return redirect()->route('ramens.index')->with('success', $ramen->shop_name.'のラーメン情報を登録しました！');
@@ -154,8 +154,9 @@ public function destroy(Ramen $ramen)
     if($ramen->image_path){
     Storage::delete('public/images/' . $ramen->image_path);
 }
+    $ramen_name=$ramen->shop_name;
     $ramen->delete();
-    return redirect()->route('ramens.index')->with('success', '削除しました');
+    return redirect()->route('ramens.index')->with('success', $ramen_name.'のラーメン情報を削除しました');
 }
 
 //地図表示
